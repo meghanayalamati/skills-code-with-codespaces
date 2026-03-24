@@ -1,0 +1,10 @@
+#!/bin/sh
+# Pre-commit hook: runs before each commit
+
+# Check for trailing whitespace
+if git diff --cached --check; then
+    exit 0
+else
+    echo "ERROR: Trailing whitespace detected. Please fix before committing."
+    exit 1
+fi

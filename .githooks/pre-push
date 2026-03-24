@@ -1,0 +1,17 @@
+#!/bin/sh
+# Pre-push hook: runs before pushing to remote
+
+# Prevent force-pushing to main/master
+protected_branches="main master"
+current_branch=$(git symbolic-ref HEAD | sed -e 's,.*/\(.*\),\1,')
+
+for branch in $protected_branches; do
+    if [ "$current_branch" = "$branch" ]; then
+        if echo "$@" | grep -q "\-\-force\|\-f"; then
+            echo "ERROR: Force-pushing to '$branch' is not allowed."
+            exit 1
+        fi
+    fi
+done
+
+exit 0
